@@ -1,24 +1,31 @@
 package org.unipop.elastic.controller.star;
 
+import org.apache.tinkerpop.gremlin.process.traversal.P;
+import org.apache.tinkerpop.gremlin.process.traversal.step.util.HasContainer;
 import org.apache.tinkerpop.gremlin.process.traversal.util.MutableMetrics;
 import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.T;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.util.iterator.EmptyIterator;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolFilterBuilder;
+import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.OrFilterBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.unipop.controller.EdgeController;
 import org.unipop.controller.Predicates;
+import org.unipop.elastic.controller.edge.ElasticEdge;
 import org.unipop.elastic.controller.vertex.ElasticVertex;
 import org.unipop.elastic.controller.vertex.ElasticVertexController;
 import org.unipop.elastic.helpers.*;
 import org.unipop.structure.BaseVertex;
 import org.unipop.structure.UniGraph;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,24 +41,32 @@ public class StarController extends ElasticVertexController implements EdgeContr
 
     @Override
     protected BaseVertex createVertex(SearchHit hit) {
-        ElasticStarVertex vertex = (ElasticStarVertex) super.createVertex(hit);
-        //TODO: add edges
+        ElasticStarVertex vertex = new ElasticStarVertex(hit.id(),hit.type(),null,graph,new LazyGetter(client,timing,refresh),elasticMutations,getDefaultIndex());
+        hit.getSource().entrySet().forEach((field) -> vertex.addPropertyLocal(field.getKey(), field.getValue()));
+        vertex.createEdges(Arrays.asList(edgeMappings), hit.getSource());
         return vertex;
     }
 
-    protected ElasticVertex createVertex(Object id, String label, Object[] keyValues, LazyGetter lazyGetter) {
-        return new ElasticStarVertex(id.toString(), label, keyValues, graph, lazyGetter, elasticMutations, getIndex(keyValues));
-    }
+//    protected ElasticVertex createVertex(Object id, String label, Object[] keyValues, LazyGetter lazyGetter) {
+//        return new ElasticStarVertex(id.toString(), label, keyValues, graph, lazyGetter, elasticMutations, getIndex(keyValues));
+//    }
 
     @Override
     public Iterator<Edge> edges(Object[] ids) {
         return null;
     }
 
+    private Object getInId(Predicates p) {
+        for (HasContainer has : p.hasContainers) {
+            if (has.getKey().equals("inid"))
+                return has.getValue();
+        }
+        return null;
+    }
+
     @Override
     public Iterator<Edge> edges(Predicates predicates, MutableMetrics metrics) {
-        //TODO
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
@@ -100,17 +115,9 @@ public class StarController extends ElasticVertexController implements EdgeContr
     @Override
     public Edge addEdge(Object edgeId, String label, Vertex outV, Vertex inV, Object[] properties) {
 
-//        EdgeMapping mapping = getEdgeMapping(label, Direction.OUT );
-//        if(mapping != null)
-//        containerVertex.addInnerEdge(mapping, edgeId, label, otherVertex, keyValues.toArray());
-//
-//
-//
-//        Predicates predicates = new Predicates();
-//        predicates.hasContainers.add(new HasContainer(T.id.getAccessor(), P.within(edgeId)));
-//        return containerVertex.edges(mapping.getDirection(), new String[]{label}, predicates).next();
-
-        //TODO
+        EdgeMapping mapping = getEdgeMapping(label, Direction.OUT );
+        if(mapping != null)
+            return ((ElasticStarVertex)outV).addInnerEdge(mapping, edgeId, inV, properties);
         return null;
     }
 
@@ -125,6 +132,9 @@ public class StarController extends ElasticVertexController implements EdgeContr
 
     @Override
     public BaseVertex vertex(Edge edge, Direction direction, Object vertexId, String vertexLabel) {
-        return null;
+        Predicates p = new Predicates();
+        p.hasContainers.add(new HasContainer("~id", P.eq(vertexId)));
+        p.hasContainers.add(new HasContainer("~label", P.eq(vertexLabel)));
+        return (BaseVertex) vertices(p,new MutableMetrics("","")).next();
     }
 }

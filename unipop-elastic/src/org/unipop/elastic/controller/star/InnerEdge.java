@@ -33,7 +33,7 @@ public class InnerEdge extends BaseEdge {
 
     @Override
     protected void innerAddProperty(BaseProperty vertexProperty) {
-        throw new NotImplementedException();
+        properties.put(vertexProperty.key(),vertexProperty);
     }
 
     public EdgeMapping getMapping() {
