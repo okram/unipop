@@ -47,26 +47,19 @@ public class StarController extends ElasticVertexController implements EdgeContr
         return vertex;
     }
 
-//    protected ElasticVertex createVertex(Object id, String label, Object[] keyValues, LazyGetter lazyGetter) {
-//        return new ElasticStarVertex(id.toString(), label, keyValues, graph, lazyGetter, elasticMutations, getIndex(keyValues));
-//    }
-
     @Override
     public Iterator<Edge> edges(Object[] ids) {
         return null;
     }
 
-    private Object getInId(Predicates p) {
-        for (HasContainer has : p.hasContainers) {
-            if (has.getKey().equals("inid"))
-                return has.getValue();
-        }
-        return null;
-    }
-
     @Override
     public Iterator<Edge> edges(Predicates predicates, MutableMetrics metrics) {
-        throw new NotImplementedException();
+        ArrayList<Edge> edgeArrayList = new ArrayList<>();
+        vertices(predicates,metrics).forEachRemaining(vertex -> {
+                    ElasticStarVertex star = (ElasticStarVertex) vertex;
+                    star.cachedEdges(Direction.OUT,new String[0],predicates).forEachRemaining(edgeArrayList::add);
+                });
+        return edgeArrayList.iterator();
     }
 
     @Override

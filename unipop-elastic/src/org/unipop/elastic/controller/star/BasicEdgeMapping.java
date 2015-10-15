@@ -58,6 +58,11 @@ public class BasicEdgeMapping implements EdgeMapping {
 
     @Override
     public Iterable<Object> getExternalVertexId(Map<String, Object> entries) {
-        return new ArrayList<Object>(){{add(entries.get(externalVertexField));}};
+        if (entries.containsKey(externalVertexField)) {
+            return new ArrayList<Object>() {{
+                add(entries.get(externalVertexField));
+            }};
+        }
+        return new ArrayList<>();
     }
 }

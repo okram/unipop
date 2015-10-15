@@ -51,7 +51,8 @@ public class StarControllerProvider implements ControllerProvider{
                 scrollSize,
                 refresh,
                 timing,
-                new BasicEdgeMapping("knows","testVertex",Direction.OUT,"oid","prop"));
+                new BasicEdgeMapping("knows","vertex",Direction.OUT,"edges","prop")
+                );
         virtualVertexController = new VirtualVertexController(graph, "testVertex");
     }
 

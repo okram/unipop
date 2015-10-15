@@ -32,7 +32,7 @@ public class ElasticStarVertex extends ElasticVertex {
     private void addEdges(EdgeMapping edgeMapping, Map<String,Object>source) {
         Iterable<Object> vertices = edgeMapping.getExternalVertexId(source);
         vertices.forEach(externalId -> {
-            InnerEdge edge = new InnerEdge(id.toString() + externalId.toString(),
+            InnerEdge edge = new InnerEdge(id.toString()+label() + externalId.toString(),
                     edgeMapping,
                     this,
                     graph.getControllerProvider().vertex(null,null,externalId, edgeMapping.getExternalVertexLabel()),
@@ -65,10 +65,12 @@ public class ElasticStarVertex extends ElasticVertex {
         });
 
         if (edges.size() > 0) return edges.iterator();
-        else return null;
+        else return new ArrayList<Edge>().iterator();
     }
 
     public Edge addInnerEdge(EdgeMapping mapping, Object edgeId, Vertex inV, Object[] properties) {
+        if(edgeId == null)
+            edgeId = id.toString() + inV.id();
         InnerEdge edge = new InnerEdge(edgeId,mapping,this,inV,properties,graph);
         innerEdges.add(edge);
         return edge;
