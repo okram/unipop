@@ -25,17 +25,17 @@ public class ElasticStarVertex extends ElasticVertex {
     }
 
     public void createEdges(List<EdgeMapping> mappings,
-                            Map<String,Object>source){
+                            Map<String, Object> source) {
         mappings.forEach(edgeMapping -> addEdges(edgeMapping, source));
     }
 
-    private void addEdges(EdgeMapping edgeMapping, Map<String,Object>source) {
+    private void addEdges(EdgeMapping edgeMapping, Map<String, Object> source) {
         Iterable<Object> vertices = edgeMapping.getExternalVertexId(source);
         vertices.forEach(externalId -> {
-            InnerEdge edge = new InnerEdge(id.toString()+label() + externalId.toString(),
+            InnerEdge edge = new InnerEdge(id.toString() + label() + externalId.toString(),
                     edgeMapping,
                     this,
-                    graph.getControllerProvider().vertex(null,null,externalId, edgeMapping.getExternalVertexLabel()),
+                    graph.getControllerProvider().vertex(null, null, externalId, edgeMapping.getExternalVertexLabel()),
                     edgeMapping.getProperties(source, externalId),
                     graph);
             innerEdges.add(edge);
@@ -69,10 +69,19 @@ public class ElasticStarVertex extends ElasticVertex {
     }
 
     public Edge addInnerEdge(EdgeMapping mapping, Object edgeId, Vertex inV, Object[] properties) {
-        if(edgeId == null)
+        if (edgeId == null)
             edgeId = id.toString() + inV.id();
-        InnerEdge edge = new InnerEdge(edgeId,mapping,this,inV,properties,graph);
+        InnerEdge edge = new InnerEdge(edgeId, mapping, this, inV, properties, graph);
         innerEdges.add(edge);
         return edge;
+    }
+
+    @Override
+    public Map<String, Object> allFields() {
+        Map<String,Object> map = super.allFields();
+        innerEdges.forEach(edge -> {
+            map.put(edge.getMapping().getExternalVertexField(), edge.inVertex().id());
+        });
+        return map;
     }
 }

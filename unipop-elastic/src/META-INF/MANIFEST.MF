@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Class-Path: jcl-over-slf4j-1.7.12.jar groovy-swing-2.4.1.jar uuid-3.4.
+ 0.jar groovy-xml-2.4.1.jar hamcrest-core-1.3.jar lucene-analyzers-com
+ mon-4.10.4.jar groovy-2.4.1-indy.jar jackson-annotations-2.5.0.jar gr
+ oovy-json-2.4.1-indy.jar lucene-sandbox-4.10.4.jar jackson-core-2.5.3
+ .jar slf4j-log4j12-1.7.12.jar commons-lang3-3.3.1.jar gremlin-shaded-
+ 3.0.1-incubating.jar jline-2.12.jar lucene-queryparser-4.10.4.jar luc
+ ene-grouping-4.10.4.jar hppc-0.7.1.jar ivy-2.3.0.jar gremlin-groovy-t
+ est-3.0.1-incubating.jar slf4j-api-1.7.12.jar groovy-jsr223-2.4.1-ind
+ y.jar tinkergraph-gremlin-3.0.1-incubating.jar jackson-databind-2.5.3
+ .jar commons-io-2.4.jar commons-configuration-1.10.jar lucene-highlig
+ hter-4.10.4.jar groovy-templates-2.4.1.jar h2-1.3.171.jar elasticsear
+ ch-1.7.2.jar lucene-memory-4.10.4.jar snakeyaml-1.12.jar gremlin-core
+ -3.0.1-incubating.jar jcabi-manifests-1.1.jar spatial4j-0.4.1.jar luc
+ ene-core-4.10.4.jar lucene-join-4.10.4.jar grabbag-1.8.1.jar groovy-c
+ onsole-2.4.1.jar lucene-queries-4.10.4.jar lucene-spatial-4.10.4.jar 
+ gremlin-groovy-3.0.1-incubating.jar gremlin-test-3.0.1-incubating.jar
+  groovy-2.4.1.jar json-20090211.jar lucene-suggest-4.10.4.jar javatup
+ les-1.2.jar commons-lang-2.6.jar groovy-groovysh-2.4.1-indy.jar junit
+ -benchmarks-0.7.2.jar log4j-1.2.17.jar junit-4.12.jar jbcrypt-0.3m.ja
+ r mockito-all-1.9.5.jar lucene-misc-4.10.4.jar hamcrest-all-1.3.jar j
+ cabi-log-0.14.jar
+Main-Class: 
+

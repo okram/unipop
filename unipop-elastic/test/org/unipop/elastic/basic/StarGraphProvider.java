@@ -18,6 +18,7 @@ public class StarGraphProvider extends ElasticGraphProvider {
     public Configuration newGraphConfiguration(String graphName, Class<?> test, String testMethodName, Map<String, Object> configurationOverrides, LoadGraphWith.GraphData loadGraphWith) {
         Configuration configuration = super.newGraphConfiguration(graphName, test, testMethodName, configurationOverrides, loadGraphWith);
         configuration.setProperty("controllerProvider", StarControllerProvider.class.getName());
+        configuration.setProperty("elasticsearch.refresh", "true");
         return configuration;
     }
 }

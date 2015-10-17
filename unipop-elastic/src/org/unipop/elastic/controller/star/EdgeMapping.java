@@ -1,6 +1,8 @@
 package org.unipop.elastic.controller.star;
 
 import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.elasticsearch.index.query.BoolFilterBuilder;
+import org.elasticsearch.index.query.FilterBuilder;
 import org.unipop.controller.Predicates;
 
 import java.util.Iterator;
@@ -19,4 +21,5 @@ public interface EdgeMapping {
     String getExternalVertexLabel() ;
 
     Iterable<Object> getExternalVertexId(Map<String, Object> entries);
+
 }

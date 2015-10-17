@@ -26,7 +26,6 @@ import java.util.Iterator;
  */
 public class StarControllerProvider implements ControllerProvider{
     private StarController controller;
-    private VirtualVertexController virtualVertexController;
     private Client client;
     private ElasticMutations elasticMutations;
     private TimingAccessor timing;
@@ -53,7 +52,6 @@ public class StarControllerProvider implements ControllerProvider{
                 timing,
                 new BasicEdgeMapping("knows","vertex",Direction.OUT,"edges","prop")
                 );
-        virtualVertexController = new VirtualVertexController(graph, "testVertex");
     }
 
     @Override
@@ -103,7 +101,7 @@ public class StarControllerProvider implements ControllerProvider{
 
     @Override
     public BaseVertex vertex(Edge edge, Direction direction, Object vertexId, String vertexLabel) {
-        return virtualVertexController.vertex(edge,direction,vertexId,vertexLabel);
+        return controller.vertex(edge,direction,vertexId,vertexLabel);
     }
 
     @Override

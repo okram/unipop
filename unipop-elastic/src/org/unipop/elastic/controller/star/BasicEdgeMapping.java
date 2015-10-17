@@ -1,6 +1,10 @@
 package org.unipop.elastic.controller.star;
 
 import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.elasticsearch.index.query.BoolFilterBuilder;
+import org.elasticsearch.index.query.FilterBuilder;
+import org.unipop.controller.Predicates;
+import org.unipop.elastic.helpers.ElasticHelper;
 
 import java.lang.Object;import java.lang.Override;import java.lang.String;
 import java.util.ArrayList;
