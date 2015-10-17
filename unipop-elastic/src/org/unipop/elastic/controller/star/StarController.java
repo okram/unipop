@@ -119,7 +119,11 @@ public class StarController extends ElasticVertexController implements EdgeContr
         EdgeMapping mapping = getEdgeMapping(label, Direction.OUT);
         if (mapping != null) {
             Edge edge = ((ElasticStarVertex) outV).addInnerEdge(mapping, edgeId, inV, properties);
-            elasticMutations.addElement(outV, getDefaultIndex(), null, false);
+            try {
+                elasticMutations.updateElement(outV, getDefaultIndex(), null, true);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
             return edge;
         }
         return null;
