@@ -19,11 +19,11 @@ public class ElasticStarVertex extends ElasticVertex {
     }
 
     @Override
-    public Iterator<BaseEdge> cachedEdges(Direction direction, String[] edgeLabels, Predicates predicates) {
-        ArrayList<BaseEdge> edges = new ArrayList<>();
+    public Iterator<Edge> cachedEdges(Direction direction, String[] edgeLabels, Predicates predicates) {
+        ArrayList<Edge> edges = new ArrayList<>();
         innerEdges.forEach(edge -> {
             EdgeMapping mapping = edge.getMapping();
-            if(mapping.getDirection().equals(direction) &&
+            if (mapping.getDirection().equals(direction) &&
                     (edgeLabels.length == 0 || StarController.contains(edgeLabels, mapping.getLabel()))) {
 
                 // Test predicates on inner edge
@@ -39,7 +39,7 @@ public class ElasticStarVertex extends ElasticVertex {
             }
         });
 
-        if(edges.size() > 0) return edges.iterator();
+        if (edges.size() > 0) return edges.iterator();
         else return null;
     }
 }

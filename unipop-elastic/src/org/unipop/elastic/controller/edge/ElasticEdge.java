@@ -9,15 +9,15 @@ import java.util.concurrent.ExecutionException;
 
 public class ElasticEdge extends BaseEdge {
 
-    public static String OutId = "outId";
-    public static String OutLabel = "outLabel";
-    public static String InId = "inId";
-    public static String InLabel = "inLabel";
+    public static String OutId = "outid";
+    public static String OutLabel = "outlabel";
+    public static String InId = "inid";
+    public static String InLabel = "inlabel";
     private final ElasticMutations elasticMutations;
     private final String indexName;
 
     public ElasticEdge(Object edgeId, String label, Object[] properties, Vertex outV, Vertex inV, ElasticEdgeController controller, UniGraph graph, ElasticMutations elasticMutations, String indexName) {
-        super(edgeId, label, properties, outV, inV, controller,  graph);
+        super(edgeId, label, properties, outV, inV, controller, graph);
 
         this.elasticMutations = elasticMutations;
         this.indexName = indexName;

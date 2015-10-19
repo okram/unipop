@@ -11,7 +11,10 @@ import java.io.IOException;
 public interface ControllerManager extends VertexController, EdgeController {
 
     void init(UniGraph graph, Configuration configuration) throws IOException;
+
     void commit();
+
     void printStats();
+
     void close();
 }

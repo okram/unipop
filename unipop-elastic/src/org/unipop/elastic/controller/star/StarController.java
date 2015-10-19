@@ -2,6 +2,7 @@ package org.unipop.elastic.controller.star;
 
 import org.apache.tinkerpop.gremlin.process.traversal.util.MutableMetrics;
 import org.apache.tinkerpop.gremlin.structure.Direction;
+import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.util.iterator.EmptyIterator;
 import org.elasticsearch.client.Client;
@@ -18,6 +19,7 @@ import org.unipop.structure.BaseEdge;
 import org.unipop.structure.BaseVertex;
 import org.unipop.structure.UniGraph;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class StarController extends ElasticVertexController implements EdgeController {
@@ -55,7 +57,7 @@ public class StarController extends ElasticVertexController implements EdgeContr
     @Override
     public Iterator<BaseEdge> fromVertex(Vertex[] vertices, Direction direction, String[] edgeLabels, Predicates predicates, MutableMetrics metrics) {
         Object[] vertexIds = new Object[vertices.length];
-        for(int i = 0; i < vertices.length; i++) vertexIds[i] = vertices[i];
+        for (int i = 0; i < vertices.length; i++) vertexIds[i] = vertices[i];
 
         BoolFilterBuilder boolFilter = ElasticHelper.createFilterBuilder(predicates.hasContainers);
         OrFilterBuilder mappingFilter = FilterBuilders.orFilter();
@@ -72,21 +74,11 @@ public class StarController extends ElasticVertexController implements EdgeContr
         QueryIterator<BaseVertex> results = new QueryIterator<>(boolFilter, 0, scrollSize,
                 predicates.limitHigh - predicates.limitLow, client, this::createVertex, refresh, timing, getDefaultIndex());
 
-        return new Iterator<BaseEdge>() {
-            public Iterator<BaseEdge> currentIterator = EmptyIterator.instance();
-
-            @Override
-            public boolean hasNext() {
-                return currentIterator.hasNext() || results.hasNext();
-            }
-
-            @Override
-            public BaseEdge next() {
-                if(!currentIterator.hasNext())
-                    currentIterator = results.next().cachedEdges(direction, edgeLabels, predicates);
-                return currentIterator.next();
-            }
-        };
+        ArrayList<BaseEdge> outEdges = new ArrayList<>();
+        results.forEachRemaining(vertex -> {
+            vertex.cachedEdges(direction, edgeLabels, predicates).forEachRemaining(e -> outEdges.add(((BaseEdge) e)));
+        });
+        return outEdges.iterator();
     }
 
     public static boolean contains(String[] edgeLabels, String label) {

@@ -26,7 +26,7 @@ public abstract class BaseVertex extends BaseElement implements Vertex {
         checkRemoved();
         ElementHelper.legalPropertyKeyValueArray(keyValues);
         ElementHelper.validateProperty(key, value);
-        if(keyValues != null && keyValues.length > 0) throw VertexProperty.Exceptions.metaPropertiesNotSupported();
+        if (keyValues != null && keyValues.length > 0) throw VertexProperty.Exceptions.metaPropertiesNotSupported();
         return this.property(key, value);
     }
 
@@ -62,8 +62,7 @@ public abstract class BaseVertex extends BaseElement implements Vertex {
         checkRemoved();
         if (this.properties.containsKey(key)) {
             return (VertexProperty<V>) this.properties.get(key);
-        }
-        else return VertexProperty.<V>empty();
+        } else return VertexProperty.<V>empty();
     }
 
     @Override
@@ -81,7 +80,7 @@ public abstract class BaseVertex extends BaseElement implements Vertex {
     public void remove() {
         super.remove();
         Iterator<Edge> edges = edges(Direction.BOTH);
-        edges.forEachRemaining(edge-> {
+        edges.forEachRemaining(edge -> {
             edge.remove();
         });
     }
@@ -102,7 +101,7 @@ public abstract class BaseVertex extends BaseElement implements Vertex {
         if (this.removed) throw Element.Exceptions.elementAlreadyRemoved(Vertex.class, this.id);
     }
 
-    public Iterator<BaseEdge> cachedEdges(Direction direction, String[] edgeLabels, Predicates predicates) {
+    public Iterator<Edge> cachedEdges(Direction direction, String[] edgeLabels, Predicates predicates) {
         return null;
     }
 
