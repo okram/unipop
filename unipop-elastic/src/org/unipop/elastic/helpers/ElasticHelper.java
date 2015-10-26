@@ -74,6 +74,10 @@ public class ElasticHelper {
                 for(Object id : (Object[])value)
                     idsFilterBuilder.addIds(id.toString());
             }
+            else if(value instanceof HashSet){
+                for(Object id : (HashSet<String>)value)
+                    idsFilterBuilder.addIds(id.toString());
+            }
             else idsFilterBuilder.addIds(value.toString());
             boolFilterBuilder.must(idsFilterBuilder);
         }
